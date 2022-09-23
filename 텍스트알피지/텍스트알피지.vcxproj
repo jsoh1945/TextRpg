@@ -127,7 +127,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="globalFunction.cpp" />
+    <ClCompile Include="usingClass.cpp" />
     <ClCompile Include="텍스트알피지.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="globalFunction.h" />
+    <ClInclude Include="usingClass.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
