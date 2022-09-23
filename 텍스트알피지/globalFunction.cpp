@@ -1,10 +1,17 @@
 #include "globalFunction.h"
 
+void TextRPG_Text() {
+	std::cout << "---------------------------------" << std::endl;
+	std::cout << "|         텍스트 알피지         |" << std::endl;
+	std::cout << "---------------------------------" << std::endl;
+}
+
 void error_msg(std::string err) {
 	std::cout << "[에러]: " << err << std::endl;
 }
 
 void showStatInfoG(Player* P) {
+	TextRPG_Text();
 	std::cout << "-----------------------" << std::endl;
 	std::cout << "|     Player Info     |" << std::endl;
 	std::cout << "-----------------------" << std::endl;
@@ -33,11 +40,13 @@ void showStatInfo(int& gameFlag, int& LastFlag, Player* P) {
 			switch (PlayerChoice) {
 			case 1:
 				gameFlag = TOWN;
+				LastFlag = 0;
 				PlayerChoice = 0;
 				system("cls");
 				break;
 			case 2:
 				gameFlag = END;
+				LastFlag = 0;
 				PlayerChoice = 0;
 				break;
 			}
@@ -50,11 +59,13 @@ void showStatInfo(int& gameFlag, int& LastFlag, Player* P) {
 			switch (PlayerChoice) {
 			case 1:
 				gameFlag = FIELD;
+				LastFlag = 0;
 				PlayerChoice = 0;
 				system("cls");
 				break;
 			case 2:
 				gameFlag = END;
+				LastFlag = 0;
 				PlayerChoice = 0;
 				break;
 			}
@@ -130,7 +141,8 @@ int startMSG() {
 	}
 }
 
-void showInventroy(int& gameFlag, int& LastFlag, Player* P) {
+void showInventory(int& gameFlag, int& LastFlag, Player* P) {
+	TextRPG_Text();
 	while (gameFlag == CHECK_INVENTORY) {
 		for (int i = 0; i < MAX_INVEN_SLOT; ++i) {
 			if (i == 0) {
@@ -147,6 +159,7 @@ void showInventroy(int& gameFlag, int& LastFlag, Player* P) {
 			switch (PlayerChoice) {
 			case 1:
 				gameFlag = FIELD;
+				LastFlag = 0;
 				PlayerChoice = 0;
 				system("cls");
 				break;
@@ -158,9 +171,24 @@ void showInventroy(int& gameFlag, int& LastFlag, Player* P) {
 			}
 		}
 		if (LastFlag == TOWN) {
-
+			std::cout << "[1. 마을로 가기]" << std::endl;
+			if (!PlayerChoosing()) {
+				continue;
+			}
+			switch (PlayerChoice) {
+			case 1:
+				gameFlag = TOWN;
+				LastFlag = 0;
+				PlayerChoice = 0;
+				system("cls");
+				break;
+			default:
+				std::cout << "다시 선택해 주세요" << std::endl;
+				Sleep(2000);
+				system("cls");
+				continue;
+			}
 		}
 
-		break;
 	}
 }

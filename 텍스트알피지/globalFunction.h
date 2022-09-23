@@ -26,6 +26,7 @@ enum gameFlag {
 extern int PlayerChoice;
 extern int flag;
 extern int LastFlag;
+void TextRPG_Text();
 void showStatInfo(int& gameFlag, int& LastFlag, Player* P);
 void showStatInfoG(Player* P);
 int PlayerChoosing(); 

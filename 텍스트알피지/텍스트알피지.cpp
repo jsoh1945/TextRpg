@@ -15,6 +15,7 @@ int main()
 		}
 		string settingMSG = "세팅중입니다.";
 		for (int i = 0; i < 3; ++i) {
+			TextRPG_Text();
 			cout << settingMSG;
 			settingMSG = settingMSG + " .";
 			Sleep(1000);
@@ -40,8 +41,13 @@ int main()
 		system("cls");
 		//마을 소환
 		while (flag == TOWN) {
+			TextRPG_Text();
 			cout << "마을에 도착했습니다. 무엇을 하시겠습니까?" << endl;
-			cout << "[1. 필드로 나가기], [2. 스텟 확인], [3. 상점 가기], [4. 게임종료]" << endl;
+			cout << "[1. 필드로 나가기]" << endl;
+			cout << "[2. 스텟 확인]" << endl;
+			cout << "[3. 인벤토리 확인]" << endl;
+			cout << "[4. 상점 가기]" << endl;
+			cout << "[5.게임종료]" << endl;
 			if (!PlayerChoosing()) {
 				continue;
 			}
@@ -52,50 +58,28 @@ int main()
 					//몬스터 사냥을 위해 필드로 나갔을 때
 					while (flag == FIELD) {
 						system("cls");
+						TextRPG_Text();
 						cout << "필드에 도착했습니다. 무엇을 하시겠습니까?" << endl;
-						cout << "[1. 몬스터를 찾기], [2. 인벤토리 확인], [3. 스텟 확인], [4. 마을로 가기]" << endl;
+						cout << "[1. 몬스터를 찾기]" << endl;
+						cout << "[2. 인벤토리 확인]" << endl;
+						cout << "[3. 스텟 확인]" << endl;
+						cout << "[4. 마을로 가기]" << endl;
 						if (!PlayerChoosing()) {
 							continue;
 						}
 						switch (PlayerChoice) {
 						case 1:
 							flag = FIND_MONSTER;
-							while (flag == FIND_MONSTER) {
-								
-							}
+							
 							PlayerChoice = 0;
 							system("cls");
 							break;
 						case 2:
 							flag = CHECK_INVENTORY;
+							LastFlag = FIELD;
 							system("cls");
 							//인벤토리 전체를 확인하기 위한 while문
-							while (flag == CHECK_INVENTORY) {
-								for (int i = 0; i < MAX_INVEN_SLOT; ++i) {
-									if (i == 0) {
-										cout << "슬롯 " << i+1 << ": " << P.getInvenItemName(i) << " - " << P.getInvenNumberOfItem(i) << "원" << endl;
-										continue;
-									}
-									cout << "슬롯 " << i+1 <<": " << P.getInvenItemName(i) << " - " << P.getInvenNumberOfItem(i) << "개" << endl;
-								}
-								cout << "[1. 뒤로가기]" << endl;
-								if (!PlayerChoosing()) {
-									continue;
-								}
-								switch (PlayerChoice) {
-								case 1:
-									flag = FIELD;
-									PlayerChoice = 0;
-									system("cls");
-									break;
-								default:
-									cout << "다시 선택해 주세요" << endl;
-									Sleep(2000);
-									system("cls");
-									continue;
-								}
-								break;
-							}
+							showInventory(flag, LastFlag, &P);
 							//나올땐 PlayerChoice가 0이 되서 나옴
 							break;
 						case 3:
@@ -123,8 +107,14 @@ int main()
 					//나올 땐 PlayerChoice가 0이되어서 나옴
 					break;
 				case 3:
+					flag = CHECK_INVENTORY;
+					LastFlag = TOWN;
+					showInventory(flag, LastFlag, &P);
 					break;
 				case 4:
+					system("cls");
+					continue;
+				case 5:
 					flag = END;
 					continue;
 				case 0:
