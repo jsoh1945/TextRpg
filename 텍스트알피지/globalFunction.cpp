@@ -1,5 +1,9 @@
 #include "globalFunction.h"
 
+std::uniform_int_distribution<int> randfrom0to99(0, 99);
+std::random_device rd;
+std::mt19937 gen(rd());
+
 void TextRPG_Text() {
 	std::cout << "---------------------------------" << std::endl;
 	std::cout << "|         텍스트 알피지         |" << std::endl;
@@ -190,5 +194,64 @@ void showInventory(int& gameFlag, int& LastFlag, Player* P) {
 			}
 		}
 
+	}
+}
+
+void BattleWithMonster(int& gameFlag, int& LastFlag, Player* P) {
+	TextRPG_Text();
+	
+	Monster M(P);
+	while (gameFlag == BATTLE) {
+		M.showStat();
+		std::cout << std::endl;
+		showStatInfoG(P);
+		PlayerChoosing();
+	}
+}
+
+void FindMonster(int& gameFlag, int& LastFlag, Player* P) {
+	system("cls");
+	int finding = randfrom0to99(gen);
+	while (gameFlag == FIND_MONSTER) {
+		TextRPG_Text();
+		std::cout << "몬스터를 찾는중입니다. . ." << std::endl;
+		Sleep(2000);
+		if (finding >= 49) {
+			std::cout << "몬스터를 찾았습니다." << std::endl;
+			std::cout << "전투하시겠습니까?" << std::endl;
+			std::cout << "[1. 전투한다], [2. 도망친다]" << std::endl;
+			PlayerChoosing();
+			switch (PlayerChoice) {
+			case 1:
+				std::cout << "몬스터와 전투합니다" << std::endl;
+				LastFlag = FIND_MONSTER;
+				gameFlag = BATTLE;
+				Sleep(1000);
+				system("cls");
+				BattleWithMonster(gameFlag, LastFlag, P);
+				LastFlag = 0;
+				gameFlag = FIELD;
+				PlayerChoice = 0;
+				system("cls");
+				break;
+			case 2:
+				std::cout << "몬스터로부터 도망쳐 다시 필드로 갑니다" << std::endl;
+				Sleep(2000);
+				LastFlag = 0;
+				gameFlag = FIELD;
+				PlayerChoice = 0;
+				system("cls");
+				break;
+			}
+		}
+		else {
+			std::cout << "몬스터를 찾지 못하였습니다." << std::endl;
+			Sleep(2000);
+			LastFlag = 0;
+			gameFlag = FIELD;
+			PlayerChoice = 0;
+			system("cls");
+			break;
+		}
 	}
 }

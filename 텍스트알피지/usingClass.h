@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include <array>
+#include <iostream>
+#include <random>
 
 #define MAX_INVEN_SLOT 20
 struct Inventory {
@@ -11,6 +13,10 @@ class Player {
 	int HP;
 	int MP;
 	int Level;
+	int ATT;
+	int DEF;
+	int EXP;
+
 	float CR;
 	int CD;
 	bool isDead;
@@ -27,22 +33,27 @@ public:
 	int getLevel();
 	float getCri();
 	int getCD();
+	int getEXP();
+	void expGain(int e);
 	std::string getInvenItemName(int n);
 	int getInvenNumberOfItem(int n);
 	std::string getClass();
 };
 
 class Monster {
+	std::string name;
+	//±âº» ½ºÅÝ
 	int HP;
 	int MP;
 	int Level;
+	int ATT;
+	int DEF;
+
 	bool isDead;
 public:
-	Monster() :HP{ 0 }, MP{ 0 }, Level{ 0 }, isDead{ false } {}
-	void setHP(int setHP) {
-		HP = setHP;
-	}
-	int getHP() {
-		return HP;
-	}
+	Monster(Player* P);
+	void getDamaged(int D);
+	void getHeal(int D);
+	int getHP();
+	void showStat();
 };

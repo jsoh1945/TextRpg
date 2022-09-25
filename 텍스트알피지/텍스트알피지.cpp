@@ -42,12 +42,14 @@ int main()
 		//마을 소환
 		while (flag == TOWN) {
 			TextRPG_Text();
+			cout << "-------------------------------------" << endl;
 			cout << "마을에 도착했습니다. 무엇을 하시겠습니까?" << endl;
 			cout << "[1. 필드로 나가기]" << endl;
 			cout << "[2. 스텟 확인]" << endl;
 			cout << "[3. 인벤토리 확인]" << endl;
 			cout << "[4. 상점 가기]" << endl;
 			cout << "[5.게임종료]" << endl;
+			cout << "-------------------------------------" << endl;
 			if (!PlayerChoosing()) {
 				continue;
 			}
@@ -59,18 +61,20 @@ int main()
 					while (flag == FIELD) {
 						system("cls");
 						TextRPG_Text();
+						cout << "-------------------------------------" << endl;
 						cout << "필드에 도착했습니다. 무엇을 하시겠습니까?" << endl;
 						cout << "[1. 몬스터를 찾기]" << endl;
 						cout << "[2. 인벤토리 확인]" << endl;
 						cout << "[3. 스텟 확인]" << endl;
 						cout << "[4. 마을로 가기]" << endl;
+						cout << "-------------------------------------" << endl;
 						if (!PlayerChoosing()) {
 							continue;
 						}
 						switch (PlayerChoice) {
 						case 1:
 							flag = FIND_MONSTER;
-							
+							FindMonster(flag, LastFlag, &P);
 							PlayerChoice = 0;
 							system("cls");
 							break;
@@ -109,6 +113,7 @@ int main()
 				case 3:
 					flag = CHECK_INVENTORY;
 					LastFlag = TOWN;
+					system("cls");
 					showInventory(flag, LastFlag, &P);
 					break;
 				case 4:

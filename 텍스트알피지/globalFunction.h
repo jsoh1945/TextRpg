@@ -1,7 +1,7 @@
 #pragma once
 #include "usingClass.h"
-#include <iostream>
 #include <Windows.h>
+
 enum ClassSelect {
 	Class_Start,
 	ภüป็,
@@ -33,3 +33,5 @@ int PlayerChoosing();
 void error_msg(std::string err);
 int startMSG();
 void showInventory(int& gameFlag, int& LastFlag, Player* P);
+void BattleWithMonster(int& gameFlag, int& LastFlag, Player* P);
+void FindMonster(int& gameFlag, int& LastFlag, Player* P);
