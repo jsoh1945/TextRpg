@@ -1,7 +1,7 @@
 #pragma once
 #include "usingClass.h"
 #include <Windows.h>
-
+#include <conio.h>
 enum ClassSelect {
 	Class_Start,
 	ภüป็,

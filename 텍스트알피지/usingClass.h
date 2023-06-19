@@ -1,13 +1,19 @@
 #pragma once
 #include <string>
 #include <array>
+#include <unordered_map>
 #include <iostream>
 #include <random>
 
 #define MAX_INVEN_SLOT 20
-struct Inventory {
-	std::array<std::string, MAX_INVEN_SLOT> itemName{};
-	std::array<int, MAX_INVEN_SLOT> NumberOfItem{};
+class Inventory {
+	std::unordered_map<std::string,int> items{};
+public:
+	Inventory();
+	void pushItem(std::string item, int amount);
+	void popItem(std::string item, int amount);
+	std::pair<std::string, int> getItemInfo(std::string name);
+	void showList();
 };
 class Player {
 	int HP;
@@ -34,9 +40,10 @@ public:
 	float getCri();
 	int getCD();
 	int getEXP();
+	int getATT();
+	int getDEF();
 	void expGain(int e);
-	std::string getInvenItemName(int n);
-	int getInvenNumberOfItem(int n);
+	Inventory& getInventory();
 	std::string getClass();
 };
 
@@ -55,5 +62,6 @@ public:
 	void getDamaged(int D);
 	void getHeal(int D);
 	int getHP();
+	int getLevel();
 	void showStat();
 };

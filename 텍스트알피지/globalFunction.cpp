@@ -4,6 +4,7 @@ std::uniform_int_distribution<int> randfrom0to99(0, 99);
 std::random_device rd;
 std::mt19937 gen(rd());
 
+
 void TextRPG_Text() {
 	std::cout << "---------------------------------" << std::endl;
 	std::cout << "|         텍스트 알피지         |" << std::endl;
@@ -26,6 +27,10 @@ void showStatInfoG(Player* P) {
 	std::cout << "|  MP: " << P->getMP() << std::endl;
 	std::cout << "-----------------------" << std::endl;
 	std::cout << "|  레벨: " << P->getLevel() << std::endl;
+	std::cout << "-----------------------" << std::endl;
+	std::cout << "|  공격력: " << P->getATT() << std::endl;
+	std::cout << "-----------------------" << std::endl;
+	std::cout << "|  방어력: " << P->getDEF() << std::endl;
 	std::cout << "-----------------------" << std::endl;
 	std::cout << "|  크리티컬: " << P->getCri() << std::endl;
 	std::cout << "-----------------------" << std::endl;
@@ -148,13 +153,7 @@ int startMSG() {
 void showInventory(int& gameFlag, int& LastFlag, Player* P) {
 	TextRPG_Text();
 	while (gameFlag == CHECK_INVENTORY) {
-		for (int i = 0; i < MAX_INVEN_SLOT; ++i) {
-			if (i == 0) {
-				std::cout << "슬롯 " << i + 1 << ": " << P->getInvenItemName(i) << " - " << P->getInvenNumberOfItem(i) << "원" << std::endl;
-				continue;
-			}
-			std::cout << "슬롯 " << i + 1 << ": " << P->getInvenItemName(i) << " - " << P->getInvenNumberOfItem(i) << "개" << std::endl;
-		}
+		P->getInventory().showList();
 		if (LastFlag == FIELD) {
 			std::cout << "[1. 필드로 가기]" << std::endl;
 			if (!PlayerChoosing()) {
@@ -198,14 +197,62 @@ void showInventory(int& gameFlag, int& LastFlag, Player* P) {
 }
 
 void BattleWithMonster(int& gameFlag, int& LastFlag, Player* P) {
+	std::uniform_int_distribution<> dmg(1, P->getATT());
+	std::uniform_int_distribution<> crit(0, P->getCri());
 	TextRPG_Text();
-	
+	int PlayerDMG = 0;
+	int MonsterDMG = 0;
+	bool isCrit = false;
 	Monster M(P);
 	while (gameFlag == BATTLE) {
+		if (M.getHP() < 0) {
+			std::uniform_int_distribution<> gold(M.getLevel(), M.getLevel() + 50);
+			int getGold = gold(gen);
+			TextRPG_Text();
+			std::cout << "몬스터와의 전투에서 승리했습니다!\n";
+			std::cout << "전리품을 획득했습니다 (" << getGold << "원)\n";
+			P->getInventory().pushItem("골드", getGold);
+			std::cout << "계속 하려면 아무키나 입력하세요\n";
+			_getch();
+			gameFlag = FIELD;
+			break;
+		}
 		M.showStat();
 		std::cout << std::endl;
 		showStatInfoG(P);
+		std::cout << "[1. 공격한다], [2. 방어한다], [3. 도망친다]" << std::endl;
 		PlayerChoosing();
+		
+		switch (PlayerChoice) {
+		case 1:
+
+			PlayerDMG = dmg(gen);
+			if (crit(gen) >= 50) {
+				isCrit = true;
+			} else {
+				isCrit = false;
+			}
+			if (isCrit) {
+				std::cout << "몬스터를 " << PlayerDMG * 2 << "대미지로 타격했습니다\n";
+				M.getDamaged(PlayerDMG * 2);
+				
+			} else {
+				std::cout << "몬스터를 " << PlayerDMG << "대미지로 타격했습니다\n";
+				M.getDamaged(PlayerDMG);
+			}
+			Sleep(1000);
+			system("cls");
+			break;
+		case 2:
+			break;
+		case 3:
+			gameFlag = FIELD;
+			system("cls");
+			break;
+		}
+		
+
+
 	}
 }
 

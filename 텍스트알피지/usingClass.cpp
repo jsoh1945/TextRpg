@@ -1,4 +1,5 @@
 #include "usingClass.h"
+#include <algorithm>
 //Player
 
 Player::Player() {
@@ -14,15 +15,7 @@ Player::Player() {
 	CD = 100;
 	isDead = false;
 	Class = "";
-	for (int i = 0; i < MAX_INVEN_SLOT; ++i) {
-		if (i == 0) {
-			P_Inven.itemName[i] = "골드";
-			P_Inven.NumberOfItem[i] = 0;
-			continue;
-		}
-		P_Inven.itemName[i] = "NONE";
-		P_Inven.NumberOfItem[i] = 0;
-	}
+
 }
 void Player::damaged(int DMG) {
 	HP = HP - DMG;
@@ -32,6 +25,10 @@ void Player::heal(int DMG) {
 }
 void Player::expGain(int e) {
 	EXP += e;
+}
+Inventory& Player::getInventory()
+{
+	return P_Inven;
 }
 void Player::setClass(std::string C) {
 	Class = C;
@@ -63,6 +60,8 @@ void Player::LevelUp() {
 		return;
 	}
 }
+
+
 int Player::getHP() {
 	return HP;
 }
@@ -82,12 +81,17 @@ int Player::getEXP() {
 	return EXP;
 }
 
-std::string Player::getInvenItemName(int n){
-	return P_Inven.itemName[n];
+int Player::getATT()
+{
+	return ATT;
 }
-int Player::getInvenNumberOfItem(int n){
-	return P_Inven.NumberOfItem[n];
+
+int Player::getDEF()
+{
+	return DEF;
 }
+
+
 std::string Player::getClass() {
 	return Class;
 }
@@ -151,6 +155,10 @@ void Monster::getHeal(int D) {
 int Monster::getHP() {
 	return HP;
 }
+int Monster::getLevel()
+{
+	return Level;
+}
 void Monster::showStat() {
 	std::cout << "------------------------" << std::endl;
 	std::cout << "|     Monster Info     |" << std::endl;
@@ -167,4 +175,64 @@ void Monster::showStat() {
 	std::cout << "------------------------" << std::endl;
 	std::cout << "|  방어력: " << DEF << std::endl;
 	std::cout << "------------------------" << std::endl;
+}
+
+Inventory::Inventory()
+{
+	items.insert(std::make_pair("골드", 0));
+}
+
+void Inventory::pushItem(std::string item, int amount)
+{
+	auto loc = items.find(item);
+	if (loc == items.end()) {
+		items.insert(std::make_pair(item, amount));
+		std::cout << "해당 아이템이 없어 인벤토리에 추가합니다\n";
+	}
+	else {
+		(*loc).second += amount;
+		std::cout << item << " +" << amount <<"\n";
+	}
+}
+
+void Inventory::popItem(std::string item, int amount)
+{
+	auto loc = items.find(item);
+	if (loc != items.end()) {
+		if (amount > (*loc).second){
+			std::cout << "해당 아이템의 갯수가 입력 값보다 적습니다\n";
+			exit;
+		}
+		(*loc).second -= amount;
+		std::cout << item << "의 갯수가" << amount<<"개 줄어들었습니다\n";
+		if ((*loc).second == 0) {
+			items.erase(item);
+			std::cout << item << "의 갯수가 0이 되어 인벤토리에서 제거됩니다\n";
+		}
+	}
+	else {
+		std::cout << "해당 아이템을 찾을 수 없습니다\n";
+	}
+
+}
+
+std::pair<std::string, int> Inventory::getItemInfo(std::string name)
+{
+	auto loc = items.find(name);
+	if (loc != items.end()) {
+		return *loc;
+	}
+	else {
+		std::cout << "해당 아이템을 찾을 수 없습니다.\n";
+		return std::make_pair("NONE",0);
+	}
+}
+
+void Inventory::showList()
+{
+	int loop = 1;
+	for (std::pair<std::string, int> p : items) {
+		std::cout << loop << ". " << p.first << ": " << p.second << "\n";
+		++loop;
+	}
 }
